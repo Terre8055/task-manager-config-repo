@@ -1,0 +1,35 @@
+{{- if .Values.serviceCluster.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.ingressService.name }}
+  namespace: default
+  {{- if .Values.cert.config.tls.enabled }}
+  annotations:
+    cert-manager.io/cluster-issuer: {{ .Values.cert.clusterIssuerName | default  "letsencrypt-staging" }}
+  {{- end }}
+spec:
+  ingressClassName: {{ .Values.httpIngressClass }}
+  rules:
+  - host: {{ .Values.ingressService.host }}
+    http:
+      paths:
+      - path: /
+        pathType: {{ .Values.ingressService.pathType }}
+        backend:
+          service:
+            name: task-manager-service
+            port:
+              number: {{ .Values.publicPort }}
+  {{- $values := .Values -}}
+  {{- if $values.cert.config.tls.enabled }}
+  tls:
+  {{- with $values.ingressService.tls.hosts }}
+  - hosts:
+    - {{ . | first }}
+    secretName: {{ $values.cert.clusterIssuerName | default  "letsencrypt-staging" }}
+  {{- end }}
+  {{- end }}
+{{- end }}
+
+

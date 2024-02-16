@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: purge-mongodb-users
+spec:
+  schedule: "0 0 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mongodb-purge
+            image: mongo:latest
+            command:
+              - sh
+              - -c
+              - mongo mongodb://task-manager-service.default.svc.cluster.local:27017/?replicaSet=MainRepSet -u root -p $(MONGODB_PASSWORD) --authenticationDatabase=admin --eval 'db.dropDatabase()'
+            env:
+              - name: MONGODB_PASSWORD
+                valueFrom:
+                  secretKeyRef:
+                    name: mysecret
+                    key: mongodb-root-password
+          restartPolicy: OnFailure

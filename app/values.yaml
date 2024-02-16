@@ -1,0 +1,51 @@
+name: task-manager-deployment
+appName: task-manager
+
+replicaCount: 2
+
+imageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-app:0.1.13
+
+ingressService:
+  name: ingress
+  host: hodesay.bounceme.net #host name for ingress 
+  pathType: Prefix
+  tls:
+    hosts:
+    - hodesay.bounceme.net
+
+publicPort: 8072
+
+httpIngressClass: nginx
+cert:
+  config:
+    email: michaelappiah2018@icloud.com #letsenccrypt clusterissuer email
+    tls:
+      enabled: true
+  clusterIssuerName: "letsencrypt-staging" 
+
+serviceCluster:
+  enabled: true #toggle to use clusterIP AND ingressControllers or LoadBalancer service
+
+
+mongodb:
+  replicaCount: 3
+  port: 27017
+  replicaSetName: MainRepSet
+  arbiter:
+    enabled: false
+  persistence:
+    name: mongodb-persistent-storage-claim
+    size: 1Gi
+    mountPath: /data/db
+  podDisruptionBudget: {}
+  auth:
+    enabled: true
+    existingSecret: mysecret
+    rootUser: root
+  architecture: replicaset
+  podSecurityContext:
+    enabled: true
+    runAsUser: 999
+    fsGroup: 999
+    runAsNonRoot: true
+    

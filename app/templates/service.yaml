@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: task-manager-service
+spec:
+  ports:
+    - port: {{ .Values.publicPort }}
+      targetPort: 80
+  selector:
+    app: {{ .Values.appName }}
+{{- if not .Values.serviceCluster.enabled }}
+  type: LoadBalancer
+{{- end }}
