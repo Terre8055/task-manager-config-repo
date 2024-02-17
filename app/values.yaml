@@ -3,7 +3,7 @@ appName: task-manager
 
 replicaCount: 2
 
-imageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-app:0.1.13
+imageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-app:0.1.14
 
 ingressService:
   name: ingress
