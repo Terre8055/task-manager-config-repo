@@ -41,20 +41,11 @@ spec:
           ports:
             - containerPort: 80
           volumeMounts:
-          - name: nginx-config
-            mountPath: /etc/nginx/conf.d
-          - name: static-files
-            mountPath: /usr/share/nginx/html
-          resources:
-            limits:
-              memory: 128Mi
-              cpu: "0.5"
-            requests:
-              memory: 64Mi
-              cpu: "0.2"
-          volumes:
-          - name: nginx-config
-            configMap:
-              name: nginx-configmap
-          - name: static-files
-            emptyDir: {}
+            - name: nginx-config
+              mountPath: /etc/nginx/nginx.conf
+              subPath: nginx.conf
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-sidecar
+            defaultMode: 0644
