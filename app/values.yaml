@@ -3,8 +3,8 @@ appName: task-manager
 
 replicaCount: 2
 
-appImageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-app:0.1.21
-nginxImageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-nginx:0.1.21
+appImageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-app:0.1.1
+nginxImageName: 644435390668.dkr.ecr.ap-south-1.amazonaws.com/dmx-tsk-nginx:0.1.1
 
 
 ingressService:
