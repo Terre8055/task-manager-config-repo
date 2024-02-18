@@ -24,11 +24,16 @@ spec:
             - configMapRef:
                 name: task-manager-mongo-conf
           env:
-            - name: MONGODB_URI
+            - name: MONGO_URI
               valueFrom:
                 secretKeyRef:
                   name: mongo-uri-secret
                   key: uri
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: flask-secret-key
+                  key: secret
           resources:
             limits:
               memory: 128Mi
