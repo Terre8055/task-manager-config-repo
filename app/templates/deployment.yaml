@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: {{ .Values.appName }}
-          image:  {{ .Values.appImageName }}
+          image:  "{{ .Values.appImageName }}:{{ .Values.appVersion }}"
           ports:
             - containerPort: 5000
           envFrom:
@@ -46,7 +46,7 @@ spec:
             requests:
               memory: 64Mi
               cpu: "0.2"
-        - image: {{ .Values.nginxImageName }}
+        - image: "{{ .Values.nginxImageName }}:{{ .Values.appVersion }}"
           name: nginx
           ports:
             - containerPort: 80
