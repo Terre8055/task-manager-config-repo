@@ -14,6 +14,7 @@ spec:
       name: {{ .Values.appName }}
       labels:
         app: {{ .Values.appName }}
+        prometheus.io/scrape: "true"
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io.scheme: "http"
