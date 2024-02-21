@@ -1,0 +1,62 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: elasticsearch
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami  
+    targetRevision: 19.18.0
+    chart: elasticsearch
+    helm:
+      releaseName: elasticsearch
+      values: |
+        master:
+          masterOnly: true
+          replicaCount: 1
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          persistence:
+            enabled: true
+            size: 300Mi
+
+        data:
+          replicaCount: 1
+
+        coordinating:
+          replicaCount: 1
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          persistence:
+            enabled: true
+            size: 300Mi
+
+        ingest:
+          replicaCount: 1
+          resources:
+            requests:
+              memory: "250Mi"
+              cpu: "250m"
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+          persistence:
+            enabled: true
+            size: 300Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
