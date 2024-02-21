@@ -1,0 +1,38 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kibana
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami  
+    targetRevision: 10.8.4
+    chart: kibana
+    helm:
+      releaseName: kibana
+      values: |
+        ingress:
+          enabled: true
+          ingressClassName: "nginx"
+          path: /
+          pathType: Prefix
+          hostname: kibanady.crabdance.com
+          annotations:
+            nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+            nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+
+        elasticsearch:
+          hosts:
+            - elasticsearch.logging.svc.cluster.local
+          port: 9200
+
+        persistence:
+          enabled: true
+          size: 300Mi
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true

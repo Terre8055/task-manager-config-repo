@@ -1,0 +1,29 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fluentd
+spec:
+  project: default
+  source:
+    repoURL: https://charts.bitnami.com/bitnami  
+    targetRevision: 5.16.0
+    chart: fluentd
+    helm:
+      releaseName: fluentd
+      values: |
+        aggregator:
+          configMap: elasticsearch-output
+          extraEnvVars:
+            - name: ELASTICSEARCH_HOST
+              value: elasticsearch.logging.svc.cluster.local
+            - name: ELASTICSEARCH_PORT
+              value: "9200"
+        forwarder:
+          configMap: apache-log-parser
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: logging
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
