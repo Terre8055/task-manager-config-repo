@@ -30,7 +30,7 @@ spec:
             path: /
   destination:
     server: https://kubernetes.default.svc
-    namespace: logging
+    namespace: kube-prometheus-stack
   syncPolicy:
     automated:
       prune: true
